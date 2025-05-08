@@ -1,6 +1,7 @@
 use std::env;
 use reqwest::blocking::Client;
 use serde_json::json;
+use tauri_plugin_dialog::{MessageDialogKind};
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
@@ -16,7 +17,8 @@ pub fn run() {
         if let Some(token) = args.get(index + 1) {
             // Make a POST request to /api/auth/game/session
             let client = Client::new();
-            let response = client.post("https://dev.tymt.com/api/auth/game/session")
+            let response = client
+                .post("https://dev.tymt.com/api/auth/game/session")
                 .json(&json!({ "drmToken": token }))
                 .send();
 
@@ -26,7 +28,7 @@ pub fn run() {
                     let body = res.text().unwrap_or_else(|_| "Failed to read response body.".to_string());
                     let output = format!("Status: {}\nResponse: {}", status, body);
                     std::fs::write("response.txt", &output).expect("Unable to write to file");
-                    
+
                     if status.is_success() {
                         println!("Session created successfully. Response written to response.txt.");
                     } else {
