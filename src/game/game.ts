@@ -124,7 +124,6 @@ export const blockTemplate: BlockTemplate = {
 };
 
 let myBoard: GameBoardClass | null = null;
-let newPiece = [];
 
 export interface GameAreaInterface {
   canvas: HTMLCanvasElement;
@@ -180,10 +179,7 @@ export interface GameAreaInterface {
 // };
 
 // Create a function to initialize the game board
-export const createGameBoard = (
-  gameArea: GameAreaInterface,
-  blockTemplate: BlockTemplate
-): { board: BlockCoordinates[]; gameBoard: GameBoardClass } => {
+export const createGameBoard = (gameArea: GameAreaInterface, blockTemplate: BlockTemplate): { board: BlockCoordinates[]; gameBoard: GameBoardClass } => {
   const board: BlockCoordinates[] = [];
 
   for (let i = 0; i < 22; i++) {
@@ -194,26 +190,14 @@ export const createGameBoard = (
   board.splice(Math.floor(Math.random() * 10) + 11, 1);
   board.splice(Math.floor(Math.random() * 10), 1);
 
-  const gameBoard = new GameBoardClass(
-    0,
-    0,
-    0,
-    0,
-    board,
-    3,
-    blockTemplate,
-    gameArea
-  );
+  const gameBoard = new GameBoardClass(0, 0, 0, 0, board, 3, blockTemplate, gameArea);
   gameBoard.nextShape();
 
   return { board, gameBoard };
 };
 
 // Create a function to initialize the game area
-export const createGameArea = (
-  canvas: HTMLCanvasElement,
-  updateGameArea: () => void
-): GameAreaInterface => {
+export const createGameArea = (canvas: HTMLCanvasElement, updateGameArea: () => void): GameAreaInterface => {
   const gameArea: GameAreaInterface = {
     canvas,
     context: canvas.getContext("2d") as CanvasRenderingContext2D,
@@ -246,9 +230,13 @@ export class GameBoardClass {
   private gameArea: GameAreaInterface;
 
   constructor(
+    // @ts-ignore
     xBlocks: number,
+    // @ts-ignore
     yBlocks: number,
+    // @ts-ignore
     blockSize: number,
+    // @ts-ignore
     boardPos: number,
     board: BlockCoordinates[],
     shape: number,
@@ -325,9 +313,7 @@ export class GameBoardClass {
 
   animateLineRemoval = (): void => {
     const ctx = this.gameArea.context;
-    ctx.fillStyle = `rgba(255, 165, 0, ${
-      0.5 + 0.5 * Math.sin(this.animationFrame / 3)
-    })`;
+    ctx.fillStyle = `rgba(255, 165, 0, ${0.5 + 0.5 * Math.sin(this.animationFrame / 3)})`;
 
     for (const line of this.linesToRemove) {
       ctx.fillRect(80, 180 + line * 30, 330, 28);
@@ -718,9 +704,7 @@ interface ClientToServerEvents {
 }
 
 // Create the socket connection with proper typing
-const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-  "http://localhost:3000"
-);
+const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io("http://localhost:3000");
 
 // Send initial game state to the server
 socket.emit("updateState", {
@@ -738,7 +722,9 @@ socket.on("updatePlayers", (players) => {
 setInterval(() => {
   if (myBoard) {
     socket.emit("updateState", {
+      // @ts-ignore
       board: myBoard.board,
+      // @ts-ignore
       score: myBoard.score,
     });
   }

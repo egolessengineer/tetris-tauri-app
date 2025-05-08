@@ -1,17 +1,7 @@
-import { useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
 import TetrisGame from "./game/tetrisGame";
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
-
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
-
   return (
     // <main className="container flex flex-col items-center gap-8 font-sans">
     //   <div className="text-2xl">Welcome to Tetris</div>

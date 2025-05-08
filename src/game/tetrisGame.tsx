@@ -29,10 +29,7 @@ const TetrisGame: React.FC = () => {
   // Refs for game objects
   const gameAreaRef = useRef<GameAreaInterface | null>(null);
   const gameBoardRef = useRef<GameBoardClass | null>(null);
-  const socketRef = useRef<Socket<
-    ServerToClientEvents,
-    ClientToServerEvents
-  > | null>(null);
+  const socketRef = useRef<Socket<ServerToClientEvents, ClientToServerEvents> | null>(null);
   const intervalRef = useRef<number | null>(null);
 
   // Process user input
@@ -148,7 +145,7 @@ const TetrisGame: React.FC = () => {
       }
     };
 
-    const handleKeyUp = (e: KeyboardEvent) => {
+    const handleKeyUp = (_e: KeyboardEvent) => {
       if (gameAreaRef.current) {
         gameAreaRef.current.key = false;
       }
